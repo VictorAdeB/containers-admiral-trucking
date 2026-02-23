@@ -1,0 +1,80 @@
+name: Build, Scan & Push Docker Image to ECR
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "build/**"        # 🔒 Only trigger when build folder changes
+
+jobs:
+  build-scan-push:
+    name: Docker Build → Scan → Push
+    runs-on: ubuntu-latest
+
+    env:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+      ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+      IMAGE_TAG: latest
+
+    steps:
+      # -----------------------------
+      # Checkout Code
+      # -----------------------------
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # -----------------------------
+      # Configure AWS Credentials
+      # -----------------------------
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      # -----------------------------
+      # Login to Amazon ECR
+      # -----------------------------
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      # -----------------------------
+      # Build Docker Image
+      # -----------------------------
+      - name: Build Docker image
+        run: |
+          docker build \
+            -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG \
+            .
+
+      # -----------------------------
+      # Install Trivy
+      # -----------------------------
+      - name: Install Trivy vulnerability scanner
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget
+          wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_0.50.1_Linux-64bit.deb
+          sudo dpkg -i trivy_0.50.1_Linux-64bit.deb
+
+      # -----------------------------
+      # Scan Docker Image
+      # ❌ FAILS if HIGH or CRITICAL vulns found
+      # -----------------------------
+      - name: Scan Docker image for vulnerabilities
+        run: |
+          trivy image \
+            --severity HIGH,CRITICAL \
+            --exit-code 1 \
+            $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
+
+      # -----------------------------
+      # Push to Amazon ECR (Only if scan passes)
+      # -----------------------------
+      - name: Push Docker image to Amazon ECR
+        run: |
+          docker push \
+            $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG

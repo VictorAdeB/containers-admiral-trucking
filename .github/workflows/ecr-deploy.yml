@@ -79,12 +79,7 @@ jobs:
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            AWS_ACCOUNT_ID=${{ secrets.AWS_ACCOUNT_ID }}
-            AWS_REGION=${{ secrets.AWS_REGION }}
-            ECR_REPOSITORY=${{ secrets.ECR_REPOSITORY }}
-
-            docker pull $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:latest
-            docker stop my-app || true
-            docker rm my-app || true
-            docker run -d --name my-app -p 80:80 \
-              $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:latest
+                docker pull 105181209418.dkr.ecr.us-west-1.amazonaws.com/admiral-trucker-landing:latest
+                docker stop my-app || true
+                docker rm my-app || true
+                docker run -d --name my-app -p 80:80 105181209418.dkr.ecr.us-west-1.amazonaws.com/admiral-trucker-landing:latest

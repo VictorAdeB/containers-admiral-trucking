@@ -376,7 +376,7 @@ function App() {
             
             {/* <!-- Copyright --> */}
             <div className="text-center">
-                <p className="text-white">
+                <p className="text-black">
                     Copyright © {getCurrentYear()} <span className="">Admiral Trucker Limited</span>. All Rights Reserved.
                 </p>
             </div>

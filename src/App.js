@@ -1,6 +1,6 @@
 // import logo from './logo.svg';
 import './App.css';
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect} from "react";
 // import classes from "./App.module.css"
 import mainLogo from "./Asset/screenshot--8--1.png";
 import rider from "./Asset/rectangle-13.svg";

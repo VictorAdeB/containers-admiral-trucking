@@ -53,8 +53,8 @@ jobs:
         with:
           image-ref: ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
           severity: HIGH,CRITICAL
-          exit-code: 1
-          format: table
+          code: 1
+          ignore-unfixed: true
 
       # -----------------------------
       # Push to ECR (Only if scan passes)

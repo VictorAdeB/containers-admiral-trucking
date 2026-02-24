@@ -4,7 +4,8 @@
 :root {
   --app-background: rgba(255, 255, 255, 1);
   --black: rgba(28, 28, 28, 1);
-  --brand: rgba(209, 38, 31, 1);
+  /* --brand: rgba(209, 38, 31, 1); */
+  --brand: rgb(244, 19, 11);
   --neutral: rgba(255, 255, 255, 1);
   --neutral-ash: rgba(246, 246, 246, 1);
   --light-red: 4px -1px 17px 15px rgba(209, 38, 31, 0.25);

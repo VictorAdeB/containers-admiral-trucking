@@ -57,24 +57,24 @@ Trust Relationship:
 
 ### 🐳 Step 1 — Build Docker Image
 ```
-docker build -t admiral-trucker-landing .
+docker build -t your-image-title .
 ```
 
 ### 🔑 Step 2 — Login to ECR
 ```
 aws ecr get-login-password --region us-west-1 | \
-docker login --username AWS --password-stdin 105181209418.dkr.ecr.us-west-1.amazonaws.com
+docker login --username AWS --password-stdin yourid.dkr.ecr.us-west-1.amazonaws.com
 ```
 
 ### 🏷 Step 3 — Tag Image
 ```
 docker tag admiral-trucker-landing:latest \
-105181209418.dkr.ecr.us-west-1.amazonaws.com/admiral-trucker-landing:latest
+<yourid>.dkr.ecr.us-west-1.amazonaws.com/admiral-trucker-landing:latest
 ```
 
 ###📤 Step 4 — Push Image to ECR
 ```
-docker push 105181209418.dkr.ecr.us-west-1.amazonaws.com/admiral-trucker-landing:latest
+docker push <yourid>.dkr.ecr.us-west-1.amazonaws.com/admiral-trucker-landing:latest
 ```
 
 ### 📄 Step 5 — Register ECS Task Definition
@@ -83,26 +83,26 @@ docker push 105181209418.dkr.ecr.us-west-1.amazonaws.com/admiral-trucker-landing
 
 ```
 aws ecs register-task-definition \
-  --region us-west-1 \
-  --family truck-app \
-  --network-mode bridge \
-  --requires-compatibilities EC2 \
-  --cpu 256 \
-  --memory 512 \
-  --execution-role-arn arn:aws:iam::105181209418:role/ecsTaskExecutionRole \
-  --container-definitions '[
-    {
-      "name": "truck",
-      "image": "105181209418.dkr.ecr.us-west-1.amazonaws.com/admiral-trucker-landing:latest",
-      "essential": true,
-      "portMappings": [
+    --region "${AWS_REGION}" \
+    --family "${TASK_FAMILY}" \
+    --network-mode bridge \
+    --requires-compatibilities EC2 \
+    --cpu "${CPU}" \
+    --memory "${MEMORY}" \
+    --execution-role-arn "${EXECUTION_ROLE_ARN}" \
+    --container-definitions "[
         {
-          "containerPort": 80,
-          "hostPort": 80
+            \"name\": \"${CONTAINER_NAME}\",
+            \"image\": \"${IMAGE_FULL_URI}\",
+            \"essential\": true,
+            \"portMappings\": [
+                {
+                    \"containerPort\": ${CONTAINER_PORT},
+                    \"hostPort\": ${CONTAINER_PORT}
+                }
+            ]
         }
-      ]
-    }
-  ]'
+    ]"
 ```
 </hr>
 

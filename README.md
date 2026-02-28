@@ -1,3 +1,6 @@
+![AWS Static Deployment Diagram](./images/Blank%20diagram%20(2).png)
+
+
 ### 🚀 Truck App Deployment (ECR → ECS with GitHub Actions)
 
 This project deploys a Dockerized application to AWS ECS (EC2 launch type) using images stored in Amazon ECR and automated via GitHub Actions

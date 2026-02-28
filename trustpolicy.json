@@ -1,0 +1,20 @@
+{
+  "Effect": "Allow",
+  "Action": [
+    "ecs:RegisterTaskDefinition",
+    "ecs:UpdateService",
+    "ecs:DescribeServices",
+    "ecs:DescribeTaskDefinition",
+    "ecr:BatchCheckLayerAvailability",
+    "ecr:CompleteLayerUpload",
+    "ecr:InitiateLayerUpload",
+    "ecr:PutImage",
+    "ecr:UploadLayerPart"
+  ],
+  "Resource": "*"
+},
+{
+  "Effect": "Allow",
+  "Action": "iam:PassRole",
+  "Resource": "arn:aws:iam::105181209418:role/ecsTaskExecutionRole"
+}

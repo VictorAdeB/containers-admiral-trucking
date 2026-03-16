@@ -292,8 +292,8 @@ Image is pushed to Amazon ECR
 
 ECS can pull and deploy the image
 
-If deployment does not reflect updates:
+<!-- If deployment does not reflect updates:
 
 ✔ Ensure unique image tags
 ✔ Force new ECS deployment
-✔ Verify task definition revision
+✔ Verify task definition revision -->
